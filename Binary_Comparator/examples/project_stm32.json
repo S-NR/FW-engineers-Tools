@@ -1,0 +1,18 @@
+{
+  "config_version": 1,
+  "name": "STM32F4 XC-200 motor controller",
+  "base_address": "0x08000000",
+  "merge_gap": 0,
+  "regions": [
+    { "name": "Bootloader",  "start": "0x08000000", "end": "0x08007FFF", "description": "Immutable boot code" },
+    { "name": "Application", "start": "0x08008000", "end": "0x0803FFFF", "description": "Main application" },
+    { "name": "Calibration", "start": "0x08040000", "end": "0x0807FFFF", "description": "Calibration tables" },
+    { "name": "Diagnostics", "start": "0x08080000", "end": "0x080BFFFF", "description": "Diagnostic routines" }
+  ],
+  "expected": [
+    { "name": "Version",         "start": "0x08001000", "end": "0x0800101F", "description": "Firmware version string" },
+    { "name": "Build timestamp", "start": "0x08001020", "end": "0x0800103F", "description": "__DATE__ / __TIME__" },
+    { "name": "Git commit",      "start": "0x08001040", "end": "0x0800105F", "description": "git describe hash" },
+    { "name": "CRC",             "start": "0x0807FFFC", "end": "0x0807FFFF", "description": "CRC-32 of 0x08000000-0x0807FFFB" }
+  ]
+}

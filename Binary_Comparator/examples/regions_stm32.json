@@ -1,0 +1,12 @@
+{
+  "config_version": 1,
+  "name": "STM32F4 example - memory regions",
+  "base_address": "0x08000000",
+  "merge_gap": 0,
+  "regions": [
+    { "name": "Bootloader",  "start": "0x08000000", "end": "0x08007FFF", "description": "Immutable boot code" },
+    { "name": "Application", "start": "0x08008000", "end": "0x0803FFFF", "description": "Main application" },
+    { "name": "Calibration", "start": "0x08040000", "end": "0x0807FFFF", "description": "Calibration tables" },
+    { "name": "Diagnostics", "start": "0x08080000", "end": "0x080BFFFF", "description": "Diagnostic routines" }
+  ]
+}

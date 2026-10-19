@@ -1,0 +1,107 @@
+Archive member included to satisfy reference by file (symbol)
+
+Discarded input sections
+
+ .text.unused_helper
+                0x00000000       0x24 build/util.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00100000         xr
+RAM              0x20000000         0x00020000         xrw
+
+Linker script and memory map
+
+LOAD build/startup.o
+
+.isr_vector     0x08000000      0x400
+ .rodata.g_pfnVectors
+                0x08000000      0x400 build/startup.o
+                0x08000000                g_pfnVectors
+
+.boot           0x08000400     0x5c00
+ .text.Reset_Handler
+                0x08000400       0x80 build/startup.o
+                0x08000400                Reset_Handler
+ .text.bootloader_main
+                0x08000480      0xb80 build/boot.o
+                0x08000480                bootloader_main
+ .rodata.fw_version
+                0x08001000       0x20 build/version.o
+                0x08001000                fw_version
+ .rodata.fw_build_timestamp
+                0x08001020       0x20 build/version.o
+                0x08001020                fw_build_timestamp
+ .rodata.fw_git_hash
+                0x08001040       0x20 build/version.o
+                0x08001040                fw_git_hash
+ .rodata.fw_product_info
+                0x08001060       0x50 build/version.o
+                0x08001060                fw_product_info
+ .text.boot_crypto_verify
+                0x08001100     0x4f00 build/boot.o
+                0x08001100                boot_crypto_verify
+
+.text           0x08008000    0x32400
+ *(.text*)
+ .text.main     0x08008100      0x240 build/main.o
+                0x08008100                main
+ .text.adc_sample_task
+                0x08009000      0x400 build/adc.o
+                0x08009000                adc_sample_task
+ .text.uart_protocol_parse
+                0x0800f000      0x800 build/uart.o
+                0x0800f000                uart_protocol_parse
+ .text.motor_control_loop
+                0x08012a40     0x3040 build/motor.o
+                0x08012a40                motor_control_loop
+ .text.motor_pwm_update
+                0x08016000      0x600 build/motor.o
+                0x08016000                motor_pwm_update
+ .text.pid_update
+                0x08021040      0x120 build/pid.o
+                0x08021040                pid_update
+ .text.can_rx_isr
+                0x0802a7f0       0x90 build/can.o
+                0x0802a7f0                can_rx_isr
+ .text.can_tx_queue
+                0x0802b000      0x300 build/can.o
+                0x0802b000                can_tx_queue
+ .text.fault_logger_v2
+                0x0803a000      0x400 build/fault.o
+                0x0803a000                fault_logger_v2
+
+.rodata         0x0803b000     0x1000
+
+.data           0x20000000      0x200 load address 0x0803c000
+ .data.g_config 0x20000000       0x40 build/config.o
+                0x20000000                g_config
+
+.bss            0x20000200     0x2400
+ .bss.g_state   0x20000200       0x40 build/main.o
+                0x20000200                g_state
+ .bss.g_motor_state_ext
+                0x20002200      0x400 build/motor.o
+                0x20002200                g_motor_state_ext
+                0x20002600                _ebss = .
+
+.calibration    0x08040000    0x40000
+ .rodata.g_calibration
+                0x08040000    0x3fffc build/calib.o
+                0x08040000                g_calibration
+ .rodata.image_crc
+                0x0807fffc        0x4 build/crc.o
+                0x0807fffc                image_crc
+
+.diagnostics    0x08080000    0x10000
+ .text.diag_ram_test
+                0x08080000      0x200 build/diag.o
+                0x08080000                diag_ram_test
+ .text.diag_flash_test
+                0x08084000      0x400 build/diag.o
+                0x08084000                diag_flash_test
+ .text.diag_watchdog_test
+                0x08088800      0x200 build/diag.o
+                0x08088800                diag_watchdog_test
+
