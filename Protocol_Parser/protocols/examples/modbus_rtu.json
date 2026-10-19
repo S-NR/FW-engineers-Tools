@@ -1,0 +1,73 @@
+{
+    "schema_version": 1,
+    "name": "Modbus RTU",
+    "description": "Basic Modbus RTU frame: slave address, function code, data, CRC-16/MODBUS (low byte first). Data is shown raw; its layout depends on the function code.",
+    "version": "1.0",
+    "default_endian": "big",
+    "fields": [
+        {
+            "name": "Slave Address",
+            "type": "uint8",
+            "values": {
+                "0x00": "Broadcast"
+            },
+            "description": "Slave address (1-247, 0 = broadcast)"
+        },
+        {
+            "name": "Function Code",
+            "type": "uint8",
+            "values": {
+                "0x01": "Read Coils",
+                "0x02": "Read Discrete Inputs",
+                "0x03": "Read Holding Registers",
+                "0x04": "Read Input Registers",
+                "0x05": "Write Single Coil",
+                "0x06": "Write Single Register",
+                "0x0F": "Write Multiple Coils",
+                "0x10": "Write Multiple Registers",
+                "0x81": "Exception: Read Coils",
+                "0x82": "Exception: Read Discrete Inputs",
+                "0x83": "Exception: Read Holding Registers",
+                "0x84": "Exception: Read Input Registers",
+                "0x85": "Exception: Write Single Coil",
+                "0x86": "Exception: Write Single Register",
+                "0x8F": "Exception: Write Multiple Coils",
+                "0x90": "Exception: Write Multiple Registers"
+            },
+            "description": "Function code"
+        },
+        {
+            "name": "Data",
+            "type": "hex",
+            "length": "remaining",
+            "description": "Function-specific data"
+        },
+        {
+            "name": "CRC",
+            "type": "crc",
+            "length": 2,
+            "endian": "little",
+            "crc": {
+                "algorithm": "CRC-16/MODBUS"
+            },
+            "description": "CRC-16/MODBUS over all preceding bytes"
+        }
+    ],
+    "examples": [
+        {
+            "name": "Request: read 10 holding registers",
+            "direction": "TX",
+            "hex": "01 03 00 00 00 0A C5 CD"
+        },
+        {
+            "name": "Response: 2 registers",
+            "direction": "RX",
+            "hex": "01 03 04 00 E6 01 C2 9B C5"
+        },
+        {
+            "name": "Exception: illegal data address",
+            "direction": "RX",
+            "hex": "01 83 02 C0 F1"
+        }
+    ]
+}

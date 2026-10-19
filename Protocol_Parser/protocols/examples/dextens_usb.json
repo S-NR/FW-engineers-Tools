@@ -1,0 +1,78 @@
+{
+    "schema_version": 1,
+    "name": "Dextens USB Protocol",
+    "description": "Example framed USB-CDC / UART protocol: STX, address, 16-bit LE length, ASCII payload, CRC-16/MODBUS (LE) over address..payload, ETX.",
+    "version": "1.0",
+    "default_endian": "little",
+    "frame": {
+        "start_byte": "02",
+        "end_byte": "03"
+    },
+    "fields": [
+        {
+            "name": "STX",
+            "type": "hex",
+            "offset": 0,
+            "length": 1,
+            "description": "Start of frame"
+        },
+        {
+            "name": "Address",
+            "type": "uint8",
+            "description": "Device address"
+        },
+        {
+            "name": "Length",
+            "type": "uint16",
+            "endian": "little",
+            "description": "Payload length"
+        },
+        {
+            "name": "Payload",
+            "type": "ascii",
+            "length_from": "Length",
+            "description": "ASCII command / response"
+        },
+        {
+            "name": "CRC",
+            "type": "crc",
+            "length": 2,
+            "endian": "little",
+            "crc": {
+                "algorithm": "CRC-16/MODBUS",
+                "range_start": "Address",
+                "range_end": "Payload"
+            },
+            "description": "CRC-16/MODBUS over Address..Payload, low byte first"
+        },
+        {
+            "name": "ETX",
+            "type": "hex",
+            "offset": "last",
+            "length": 1,
+            "description": "End of frame"
+        }
+    ],
+    "examples": [
+        {
+            "name": "TX: get diag",
+            "direction": "TX",
+            "hex": "02 01 08 00 67 65 74 20 64 69 61 67 DD 1F 03"
+        },
+        {
+            "name": "RX: diag:OK",
+            "direction": "RX",
+            "hex": "02 01 07 00 64 69 61 67 3A 4F 4B DD BB 03"
+        },
+        {
+            "name": "TX: corrupted CRC",
+            "direction": "TX",
+            "hex": "02 01 08 00 67 65 74 20 64 69 61 67 A3 27 03"
+        },
+        {
+            "name": "TX: length field too large",
+            "direction": "TX",
+            "hex": "02 01 20 00 67 65 74 20 64 69 61 67 DD 1F 03"
+        }
+    ]
+}

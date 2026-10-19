@@ -1,0 +1,111 @@
+{
+    "schema_version": 1,
+    "name": "Simple Sensor Packet",
+    "description": "Fixed-size sensor telemetry frame with scaled values, a status bit field and an 8-bit SUM checksum.",
+    "version": "1.0",
+    "default_endian": "big",
+    "fields": [
+        {
+            "name": "Header",
+            "type": "hex",
+            "length": 2,
+            "expected": "AA55",
+            "description": "Sync header"
+        },
+        {
+            "name": "Device ID",
+            "type": "uint16",
+            "description": "Sensor device ID"
+        },
+        {
+            "name": "Temperature",
+            "type": "int16",
+            "scale": 0.1,
+            "unit": "°C",
+            "description": "Temperature, 0.1 °C per LSB"
+        },
+        {
+            "name": "Humidity",
+            "type": "uint16",
+            "scale": 0.1,
+            "unit": "%RH",
+            "description": "Relative humidity, 0.1 %RH per LSB"
+        },
+        {
+            "name": "Status",
+            "type": "bitfield",
+            "length": 1,
+            "bits": [
+                {
+                    "name": "Fault",
+                    "start": 7,
+                    "length": 1,
+                    "description": "Sensor fault"
+                },
+                {
+                    "name": "Warning",
+                    "start": 6,
+                    "length": 1,
+                    "description": "Warning condition"
+                },
+                {
+                    "name": "Ready",
+                    "start": 5,
+                    "length": 1,
+                    "description": "Measurement ready"
+                },
+                {
+                    "name": "Mode",
+                    "start": 3,
+                    "length": 2,
+                    "values": {
+                        "0": "Idle",
+                        "1": "Normal",
+                        "2": "Fast",
+                        "3": "Calibration"
+                    },
+                    "description": "Operating mode"
+                },
+                {
+                    "name": "Sensor active",
+                    "start": 2,
+                    "length": 1,
+                    "description": "Sensing element powered"
+                },
+                {
+                    "name": "Communication OK",
+                    "start": 0,
+                    "length": 1,
+                    "description": "Bus communication healthy"
+                }
+            ],
+            "description": "Status flags"
+        },
+        {
+            "name": "Checksum",
+            "type": "checksum",
+            "length": 1,
+            "checksum": {
+                "algorithm": "sum8"
+            },
+            "description": "Byte sum of all preceding bytes, modulo 256"
+        }
+    ],
+    "examples": [
+        {
+            "name": "Reading 1",
+            "direction": "RX",
+            "hex": "AA 55 01 02 00 EB 01 C2 A5 55"
+        },
+        {
+            "name": "Reading 2",
+            "direction": "RX",
+            "hex": "AA 55 01 02 00 EC 01 C4 A5 58"
+        },
+        {
+            "name": "Reading 3",
+            "direction": "RX",
+            "hex": "AA 55 01 02 00 ED 01 C3 A5 58"
+        }
+    ]
+}
