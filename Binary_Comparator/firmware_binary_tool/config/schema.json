@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "firmware_binary_tool/config/schema.json",
+  "title": "Firmware Binary Comparison Tool - project / region configuration",
+  "description": "Documentation of the configuration file format. The tool validates files itself (no jsonschema dependency). Addresses may be integers or strings ('0x08000000', '134217728', '08000000h'). Region 'end' addresses are INCLUSIVE.",
+  "type": "object",
+  "properties": {
+    "config_version": { "type": "integer", "const": 1 },
+    "name": { "type": "string", "description": "Free-text project name" },
+    "notes": { "type": "string" },
+    "base_address": { "$ref": "#/$defs/number", "description": "MCU address of file offset 0 for raw .bin files" },
+    "merge_gap": { "$ref": "#/$defs/number", "description": "Join changed runs separated by <= N unchanged bytes (default 0)" },
+    "gap_fill": {
+      "anyOf": [{ "$ref": "#/$defs/number" }, { "type": "null" }],
+      "description": "Optional. Compare bytes present in only one image against this value (e.g. '0xFF' for erased flash). Omit/null = strict: such bytes are always differences."
+    },
+    "regions": { "type": "array", "items": { "$ref": "#/$defs/range" } },
+    "expected": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/range" },
+      "description": "Areas expected to change between builds (version, timestamp, CRC ...). Differences here are reported as EXPECTED CHANGE; everything else is UNEXPECTED."
+    },
+    "ignore": { "type": "array", "items": { "$ref": "#/$defs/range" }, "description": "Alias of 'expected'" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "number": {
+      "anyOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "string", "pattern": "^\\s*(0[xX][0-9A-Fa-f_]+|[0-9A-Fa-f_]+[hH]|[0-9_]+)\\s*$" }
+      ]
+    },
+    "range": {
+      "type": "object",
+      "required": ["name", "start"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "start": { "$ref": "#/$defs/number" },
+        "end": { "$ref": "#/$defs/number", "description": "Inclusive end address" },
+        "size": { "$ref": "#/$defs/number", "description": "Alternative to 'end'" },
+        "description": { "type": "string" }
+      },
+      "oneOf": [{ "required": ["end"] }, { "required": ["size"] }],
+      "additionalProperties": false
+    }
+  }
+}
