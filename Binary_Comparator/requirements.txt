@@ -1,0 +1,8 @@
+# Firmware Binary Comparison Tool - runtime requirements
+#
+# The tool itself needs ONLY the Python 3.11+ standard library (Tkinter included).
+# Everything below is optional.
+
+# Optional: native drag-and-drop of files onto the Firmware A / B panels.
+# Without it the GUI still works; use the Browse buttons or pass files on the command line.
+tkinterdnd2>=0.3.0

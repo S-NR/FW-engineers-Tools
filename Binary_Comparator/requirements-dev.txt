@@ -1,0 +1,4 @@
+# Development / packaging tools (not needed to run the application)
+-r requirements.txt
+pyinstaller>=6.0
+pytest>=7.0
